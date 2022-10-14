@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: redpanda-go-producer-service
+spec:
+  ports:
+    - port: 9090
+      targetPort: 8080
+  selector:
+    app: redpanda-go-producer
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redpanda-go-producer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redpanda-go-producer
+  template:
+    metadata:
+      labels:
+        app: redpanda-go-producer
+    spec:
+      containers:
+        - image: redpanda-go-producer
+          name: redpanda-go-producer
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080

@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redpanda-go-consumer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redpanda-go-consumer
+  template:
+    metadata:
+      labels:
+        app: redpanda-go-consumer
+    spec:
+      containers:
+        - image: redpanda-go-consumer
+          name: redpanda-go-consumer
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: POSTGRESQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-demo-postgresql
+                  key: postgres-password
+                  optional: false
+
